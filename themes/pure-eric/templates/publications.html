@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pure-g-r" id="layout">
+    {% include 'sidebar.html' %}
+    <div class="pure-u-1">
+        <div class="content">
+            <div id="publications" class="posts" >
+                <h1 class="content-subhead">
+                    Publications
+                </h1>
+                My publications on
+                <a href="http://scholar.google.com/citations?user=87KLuLUAAAAJ">
+                Google Scholar
+                </a>
+                <br/>
+                <br/>
+                {% for item in PUBLICATION_LIST %}
+                    {% include 'publi.html' %}
+                {% endfor %}
+                {% include 'footer.html' %}
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

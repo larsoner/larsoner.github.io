@@ -6,7 +6,7 @@ import bibtexparser
 
 AUTHOR = 'Eric Larson'
 SITENAME = 'Eric Larson'
-SITEURL = 'larsoner.com'
+SITEURL = ''
 
 PATH = 'content'
 
@@ -45,7 +45,12 @@ PROFILE_IMAGE_URL = '/images/profile.jpg'
 
 GOOGLE_ANALYTICS = "UA-35793277-1"
 
-STATIC_PATHS = ['images', 'pdfs', 'widgets']
+STATIC_PATHS = ['images', 'extra']
+EXTRA_PATH_METADATA = {
+    'extra/CNAME': {'path': 'CNAME'},
+    'extra/.nojeykyll': {'path': '.nojekyll'},
+    'extra/favicon.ico': {'path': 'favicon.ico'},
+}
 PAGE_EXCLUDES = ['widgets', '.ipynb_checkpoints']
 ARTICLE_EXCLUDES = ['widgets', '.ipynb_checkpoints']
 DISPLAY_CATEGORIES_ON_MENU = False
@@ -61,8 +66,7 @@ PAGINATION_PATTERNS = (
 
 PLUGIN_PATHS = ['../pelican-plugins']
 
-TEMPLATE_PAGES = {'publications.html': 'publications.html',
-                  'erc-slab.html': 'erc-slab.html'}
+TEMPLATE_PAGES = {}
 
 # Publications
 

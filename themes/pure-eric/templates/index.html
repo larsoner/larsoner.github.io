@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pure-g-r" id="layout">
+    {% include 'sidebar.html' %}
+    <div class="pure-u-1">
+        <div class="content">
+            <!-- A wrapper for all the pages -->
+            <div class="posts">
+                {% for pg in pages %}
+                    <h1 class="content-subhead" id="{{ pg.category }}">{{ pg.title }}</h1>
+                    <section class="post">
+                        <p class="post-meta">{{ pg.content }}</p>
+                    </section>
+                {% endfor %}
+            </div>
+
+            <div class="pure-g">
+                    <div class="pure-u">
+                         <div id="publications" class="posts" >
+                            <h1 class="content-subhead">
+                                Recent Publications
+                            </h1>
+                            {% for item in PUBLICATION_LIST_SHORT %}
+                                {% include 'publi_short.html' %}
+                            {% endfor %}
+                            <a href="publications.html">Full list of publications</a>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- A wrapper for all the blog posts -->
+            <div class="posts">
+                <!--
+                <h1 class="content-subhead">
+                    {% block pagetitle %}
+                        {% if not articles_page.has_previous() %}
+                            Latest posts
+                        {% else %}
+                            Posts
+                        {% endif %}
+                    {% endblock pagetitle %}
+                    {% if articles_page.has_previous() %}
+                        &ndash; Page&nbsp;{{ articles_page.number }}
+                    {% endif %}
+                </h1>
+                {% for article in articles_page.object_list %}
+                    {% include 'post.html' %}
+                    {% if MATH is defined and not MATH['auto_insert'] %}
+                        {% if page and page.mathjax or article and article.mathjax %}
+                            {% set mathjax = True %}
+                        {% endif %}
+                    {% endif %}
+                    {% if loop.last and mathjax is defined %}
+                        {{ MATHJAXSCRIPT }}
+                    {% endif %}
+                {% endfor %}
+                {% include 'pagination.html' %}
+                -->
+                {% include 'footer.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

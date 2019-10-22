@@ -1,0 +1,31 @@
+<p class="post-meta">
+    {{ item['author'] }} ({{ item['year']}}). <i>{{ item['title']}}</i>.
+    {% if item['ENTRYTYPE'] == 'inproceedings' %}
+        {{ item['booktitle'] }}
+    {% elif item['ENTRYTYPE'] == 'article' %}
+        {{ item['journal'] }}
+        {% if 'volume' in item %}
+            {{ item['volume'] }}: ({{ item['pages'] }}).
+        {% else %}
+            .
+        {% endif %}
+    {% else %}
+    {% endif %}
+    {% if 'pdf' in item %}
+        <a href="{{ item['pdf'] }}">
+            <img src="images/Haltools_pdf.png">
+        </a>
+    {% endif %}
+    {% if 'link' in item %}
+        <a href="{{ item['link'] }}">[www]</a>
+    {% endif %}
+    {% if 'comment' in item %}
+        {{ item['comment'] }}
+    {% endif %}
+    {% if 'bibtex' in item %}
+        <a class="publi-bibtex-button" id="bibtex_{{ item['index'] }}">[BibTeX]</a>
+        <div class="publi-bibtex" id="bibtex_{{ item['index'] }}_content">
+            <pre>{{ item['bibtex'] }}</pre>
+        </div>
+    {% endif %}
+</p>

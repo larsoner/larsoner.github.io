@@ -10,5 +10,8 @@ and electroencephalography (EEG). My days are spent working on signal
 processing, denoising, scientific computing, and software engineering for doing
 better science.
 
-In 2010 I graduated from the BU Biomedical Engineering MS/PhD program.
-I grew up in Ann Arbor, Michigan and went to Kalamazoo College.
+Previously:
+
+- BS in mathematics, physics, and philosophy from [Kalamazoo College](https://www.kzoo.edu/) (2002)
+- MS/PhD in Biomedical Engineering from [BU](https://www.bu.edu/eng/departments/bme/)
+- Postdoc with Adrian KC lee, [LABSN at UW](http://depts.washington.edu/labsn/People/Lee/lee.html)

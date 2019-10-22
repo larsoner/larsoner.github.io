@@ -1,0 +1,65 @@
+<div class="sidebar pure-u">
+    <div class="cover-img" {% if COVER_IMG_URL -%}
+        style="background-image: url('{% block sidebar %}{{ COVER_IMG_URL }}{% endblock %}')"
+        {%- else -%}
+        style="background: none repeat scroll 0% 0% #014c71"
+        {%- endif -%}>
+        <div class="cover-body">
+            <header class="header">
+            <hgroup>
+                {% if PROFILE_IMG_URL %}
+                    <a href="/">
+                        <img class="avatar" src="{{ PROFILE_IMG_URL }}">
+                    </a>
+                {% endif %}
+
+                <nav id="nav">
+
+                    <h2><a href="/">Eric Larson</a></h2>
+
+                    <p class="brand-main-sub">
+                        <em>Research Scientist</em>
+                        <br />
+                        <a href="http://ilabs.washington.edu/">Institute for Learning and Brain Sciences</a>,
+                        <br />
+                        University of Washington
+                    </p>
+
+                    <p>
+                        <ul>
+                            <li class="nav"><a href="index.html#shortbio" id="about-link" class="skel-layers-ignoreHref">Short Bio</a></li>
+                            <li class="nav"><a href="index.html#software" id="software-link" class="skel-layers-ignoreHref">Software</a></li>
+                            <li class="nav"><a href="publications.html" id="publications-link" class="skel-layers-ignoreHref">Publications</a></li>
+                        </ul>
+                    </p>
+                </nav>
+
+                <p class="tagline">{{ TAGLINE }}</p>
+                {% for title, link in MENUITEMS %}
+                <p class="links"><a href="{{ link }}">{{ title }}</a></p>
+                {% endfor %}
+
+                {% if DISPLAY_PAGES_ON_MENU %}
+                {% for page in PAGES %}
+                <p class="links"><a href="{{ SITEURL }}/pages/{{ page.slug }}">{{ page.title }}</a></p>
+                {% endfor %}
+                {% endif %}
+
+                <p class="social">
+                {% for title, link in SOCIAL %}
+                {% if title == "google-scholar-square" %}
+                <a href="{{ link }}">
+                    <i class="ai ai-{{ title }} ai-3x"></i>
+                </a>
+                {% else %}
+                <a href="{{ link }}">
+                    <i class="fa fa-{{ title }} fa-3x"></i>
+                </a>
+                {% endif %}
+                {% endfor %}
+                </p>
+            </hgroup>
+            </header>
+        </div>
+    </div>
+</div>
