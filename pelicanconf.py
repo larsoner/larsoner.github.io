@@ -66,7 +66,9 @@ PAGINATION_PATTERNS = (
 
 PLUGIN_PATHS = ['../pelican-plugins']
 
-TEMPLATE_PAGES = {}
+TEMPLATE_PAGES = {
+    'publications.html': 'publications.html',
+}
 
 # Publications
 
