@@ -1,0 +1,5 @@
+output
+pelican.pid
+*.pyc
+.DS_Store
+srv.pid
