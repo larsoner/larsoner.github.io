@@ -1,4 +1,5 @@
 output
+logo.png
 pelican.pid
 *.pyc
 .DS_Store
