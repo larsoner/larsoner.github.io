@@ -142,3 +142,4 @@ entries.sort(key=lambda record: record.get('date', record.get('year', None)),
 PUBLICATION_LIST = entries
 PUBLICATION_LIST_SLAB = entries
 PUBLICATION_LIST_SHORT = PUBLICATION_LIST[:7]
+TAGLINE = 'UW ILABS'
