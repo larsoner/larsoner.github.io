@@ -130,12 +130,14 @@ def get_bib_entries(bib_fname):
         if 'url' in item:
             item['link'] = item['url']
         entries.append(item)
+        assert 'date' in item or 'year' in item, item['title']
     return entries
 
 
 entries = get_bib_entries('./data/larsoner.bib')
 
-# records.entries.sort(key=lambda record: record['year'], reverse=True)
+entries.sort(key=lambda record: record.get('date', record.get('year', None)),
+             reverse=True)
 
 PUBLICATION_LIST = entries
 PUBLICATION_LIST_SLAB = entries
