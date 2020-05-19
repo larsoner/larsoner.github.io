@@ -83,6 +83,9 @@ def make_nice_author(author, emphasize='Larson, E'):
             names.append(n[0])
         else:
             assert len(n) == 2, n
+            for ii in range(2):
+                if n[ii].startswith('{') and n[ii].endswith('}'):
+                    n[ii] = n[ii][1:-1]
             names.append('{}, {}.'.format(n[0], n[1][:1]))
     if len(split_author) > 1:
         author_edit = ', '.join(names[:insert_pos]) + ' and ' + names[insert_pos]
