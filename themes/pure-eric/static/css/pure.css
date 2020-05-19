@@ -278,7 +278,7 @@ pre {
     font-size: 130%;
     font-weight: 400;
     letter-spacing: 0.1em;
-} 
+}
 
 .content {
     padding: 2em 3em 0;
@@ -476,7 +476,7 @@ label {
     padding: 0.3em 0.3em;
 }
 
-/*Select Categorie*/	
+/*Select Categorie*/
 
 input[type="radio"][id="select-talks"]:checked + label {
     font-size: 80%
@@ -493,13 +493,13 @@ input[type="radio"][id="select-awards"]:checked + label {
 
 input#select-talks:checked ~ #teach-item,
 input#select-talks:checked ~ #awards-item,
-input#select-talks:checked ~ #attend-item, 
+input#select-talks:checked ~ #attend-item,
 input#select-teach:checked ~ #talks-item,
 input#select-teach:checked ~ #awards-item,
-input#select-teach:checked ~ #attend-item, 
+input#select-teach:checked ~ #attend-item,
 input#select-awards:checked ~ #talks-item,
 input#select-awards:checked ~ #teach-item,
-input#select-awards:checked ~ #attend-item, 
+input#select-awards:checked ~ #attend-item,
 input#select-attend:checked ~ #talks-item,
 input#select-attend:checked ~ #awards-item,
 input#select-attend:checked ~ #teach-item {
@@ -549,4 +549,9 @@ input#select-attend:checked ~ #teach-item {
 .publi-bibtex {
     font-size: 85%;
     display: none;
+}
+
+.small-logo {
+    height: 0.9em !important;
+    padding-right: 0.2em;
 }
