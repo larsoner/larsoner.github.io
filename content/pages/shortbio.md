@@ -4,8 +4,9 @@ category: shortbio
 
 I am a research scientist at the University of Washington
 [Institute for Learning and Brain Sciences](http://ilabs.washington.edu),
-working primarily with magnetoencephalography (MEG) and
-electroencephalography (EEG) data.
+working primarily with human electrophysiological data:
+magnetoencephalography (MEG), electroencephalography (EEG),
+functional near-infared spectroscopy (fNIRS), and intracranial EEG (iEEG).
 
 Previously:
 
