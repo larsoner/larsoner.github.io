@@ -130,7 +130,9 @@ def get_bib_entries(bib_fname):
         item['bibtex'] = bibtexparser.dumps(one_records).strip()
         item['title'] = make_nice_title(item['title'])
         item['index'] = k
-        if 'url' in item:
+        if 'doi' in item:
+            item['link'] = f'https://doi.org/{item["doi"]}'
+        elif 'url' in item:
             item['link'] = item['url']
         entries.append(item)
         assert 'date' in item or 'year' in item, item['title']
@@ -146,3 +148,4 @@ PUBLICATION_LIST = entries
 PUBLICATION_LIST_SLAB = entries
 PUBLICATION_LIST_SHORT = PUBLICATION_LIST[:7]
 TAGLINE = 'UW ILABS'
+N_PUBLICATIONS = len(PUBLICATION_LIST)

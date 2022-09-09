@@ -6,15 +6,12 @@
     <div class="pure-u-1">
         <div class="content">
             <div id="publications" class="posts" >
-                <h1 class="content-subhead">
-                    Publications
-                </h1>
-                My publications on
-                <a href="http://scholar.google.com/citations?user=87KLuLUAAAAJ">
-                Google Scholar
-                </a>
-                <br/>
-                <br/>
+                <h1 class="content-subhead">Publications</h1>
+                <p>My publications are also available on
+                <a href="http://scholar.google.com/citations?user=87KLuLUAAAAJ">Google Scholar</a></li> and
+                <a href="https://www.ncbi.nlm.nih.gov/myncbi/eric.larson.4/bibliography/public/">NCBI MyBibliography</a>.
+                </p>
+                <h1 class="content-subhead">List ({{ N_PUBLICATIONS }})</h1>
                 {% for item in PUBLICATION_LIST %}
                     {% include 'publi.html' %}
                 {% endfor %}
