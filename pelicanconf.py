@@ -43,7 +43,7 @@ THEME = "themes/pure-eric"
 PROFILE_IMG_URL = '/images/profile.jpg'
 PROFILE_IMAGE_URL = '/images/profile.jpg'
 
-GOOGLE_ANALYTICS = "UA-35793277-1"
+GOOGLE_ANALYTICS = "G-LQRZSPRFBY"
 
 STATIC_PATHS = ['images', 'extra']
 EXTRA_PATH_METADATA = {
