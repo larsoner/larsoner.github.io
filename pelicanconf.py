@@ -130,6 +130,8 @@ def get_bib_entries(bib_fname):
         item['bibtex'] = bibtexparser.dumps(one_records).strip()
         item['title'] = make_nice_title(item['title'])
         item['index'] = k
+        if 'pages' in item:
+            item['pages'] = item['pages'].replace('--', '–')
         if 'doi' in item:
             item['link'] = f'https://doi.org/{item["doi"]}'
         elif 'url' in item:
