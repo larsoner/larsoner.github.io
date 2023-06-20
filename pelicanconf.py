@@ -98,9 +98,7 @@ def make_nice_author(author, emphasize='Larson, E'):
 
 
 def make_nice_title(title):
-    title = title.replace('{', '')
-    title = title.replace('}', '')
-    return title
+    return title.replace('{', '').replace('}', '').replace('\\', '')
 
 
 """ XXX
@@ -136,6 +134,8 @@ def get_bib_entries(bib_fname):
             item['link'] = f'https://doi.org/{item["doi"]}'
         elif 'url' in item:
             item['link'] = item['url']
+        if 'journal' in item:
+            item['journal'] = make_nice_title(item['journal'])
         entries.append(item)
         assert 'date' in item or 'year' in item, item['title']
     return entries
@@ -143,8 +143,14 @@ def get_bib_entries(bib_fname):
 
 entries = get_bib_entries('./data/larsoner.bib')
 
-entries.sort(key=lambda record: record.get('date', record.get('year', None)),
-             reverse=True)
+def date_sort(record):
+    date = record.get('date', record.get('year', '')).split('/')[0].split('-')[0]
+    if date == 'in press':
+        date = '9999'
+    date = int(date)
+    return date
+
+entries.sort(key=date_sort, reverse=True)
 
 PUBLICATION_LIST = entries
 PUBLICATION_LIST_SLAB = entries
