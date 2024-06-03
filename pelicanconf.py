@@ -56,7 +56,7 @@ ARTICLE_EXCLUDES = ['widgets', '.ipynb_checkpoints']
 DISPLAY_CATEGORIES_ON_MENU = False
 DISPLAY_PAGES_ON_MENU = False
 DEFAULT_DATE = 'fs'
-FILENAME_METADATA = '(?P<date>\d{4}-\d{2}-\d{2})-(?P<slug>.*)'
+FILENAME_METADATA = r'(?P<date>\d{4}-\d{2}-\d{2})-(?P<slug>.*)'
 
 DEFAULT_PAGINATION = 5
 PAGINATION_PATTERNS = (
@@ -74,6 +74,7 @@ TEMPLATE_PAGES = {
 
 
 def make_nice_author(author, emphasize='Larson, E'):
+    author = author.replace("\n", " ")
     split_author = author.split(' and ')
     insert_pos = len(split_author) - 1
     names_split = [au.split(', ') for au in split_author]
@@ -98,7 +99,7 @@ def make_nice_author(author, emphasize='Larson, E'):
 
 
 def make_nice_title(title):
-    return title.replace('{', '').replace('}', '').replace('\\', '')
+    return title.replace('{', '').replace('}', '').replace("\\", '').replace("\n", " ")
 
 
 """ XXX
@@ -118,8 +119,9 @@ def get_bib_entries(bib_fname):
 
     entries = []
 
+    missing_dates = []
     for k, item in enumerate(records.entries):
-        one_records.entries = records.entries[k:k + 1]
+        one_records.entries = [item]
         item['author'] = make_nice_author(item['author'])
         for key in ['annote', 'owner', 'group', 'topic']:
             if key in item:
@@ -134,10 +136,18 @@ def get_bib_entries(bib_fname):
             item['link'] = f'https://doi.org/{item["doi"]}'
         elif 'url' in item:
             item['link'] = item['url']
-        if 'journal' in item:
-            item['journal'] = make_nice_title(item['journal'])
+        for key in ("title", "journal", "booktitle"):
+            if key in item:
+                item[key] = make_nice_title(item[key])
         entries.append(item)
-        assert 'date' in item or 'year' in item, item['title']
+        if "date" not in item and "year" not in item:
+            missing_dates.append(item['title'][:80])
+    assert not missing_dates, "Missing dates:\n" + "\n".join(missing_dates)
+
+    # with open("/Users/larsoner/Desktop/zotero.txt", "w") as fid:
+    #     for ent in sorted(entries, key=lambda e: e["title"]):
+    #         fid.write(f"{ent['title'][:80].lower()}\n")
+
     return entries
 
 
