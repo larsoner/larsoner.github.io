@@ -30,7 +30,7 @@ SOCIAL = (
     # ('twitter-square', 'https://twitter.com/agramfort'),
     ('google-scholar-square',
      'https://scholar.google.com/citations?user=87KLuLUAAAAJ'),
-    ('linkedin', 'www.linkedin.com/in/larsoner')
+    ('linkedin', 'https://www.linkedin.com/in/larsoner')
 )
 
 DEFAULT_PAGINATION = 10
