@@ -250,7 +250,7 @@ SOFTWARE_MORE = (
 
 TIMELINE = (  # (years, logo, institution, URL, description)
     ('2014–present', 'UW.svg', 'University of Washington', 'https://ilabs.uw.edu',
-     'Research scientist, Institute for Learning & Brain Sciences'),
+     'Principal research scientist, Institute for Learning & Brain Sciences'),
     ('2011–2013', 'UW.svg', 'University of Washington',
      'https://labsn.uw.edu',
      'Postdoctoral fellow, Speech & Hearing Sciences, with Adrian KC Lee'),
