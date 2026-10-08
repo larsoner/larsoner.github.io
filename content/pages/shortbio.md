@@ -2,14 +2,15 @@ title: Short Bio
 sortorder: 0
 category: shortbio
 
-I am a research scientist at the University of Washington
+I am a principal research scientist at the University of Washington
 [Institute for Learning and Brain Sciences](http://ilabs.washington.edu),
 working primarily with human electrophysiological data:
 magnetoencephalography (MEG), electroencephalography (EEG),
-functional near-infared spectroscopy (fNIRS), and intracranial EEG (iEEG).
+functional near-infrared spectroscopy (fNIRS), and intracranial EEG (iEEG).
 
-Previously:
-
-- <img src="./images/K.png" alt="K" class="small-logo">Kalamazoo College : BA in [mathematics, physics, and philosophy](https://www.kzoo.edu/)
-- <img src="./images/BU.svg" alt="BU" class="small-logo">Boston University : MS/PhD in [Biomedical Engineering](https://www.bu.edu/eng/departments/bme/)
-- <img src="./images/UW.svg" alt="UW" class="small-logo">University of Washington : Postdoc with [Adrian KC Lee](http://depts.washington.edu/labsn/People/Lee/lee.html)
+I am a member of the [MNE-Python](https://mne.tools) Steering Council and
+a maintainer of [SciPy](https://scipy.org) and other packages in the
+scientific Python ecosystem. My work on keeping these tools findable, accessible, interoperable,
+and reusable (FAIR) is supported by an NIH NINDS Research Specialist Award
+([R50NS147973](https://reporter.nih.gov/project-details/11338031)),
+along with other national grants.

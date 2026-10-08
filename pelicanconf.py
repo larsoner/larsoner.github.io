@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
+import html
+
 import bibtexparser
 
 
@@ -30,6 +32,7 @@ SOCIAL = (
     # ('twitter-square', 'https://twitter.com/agramfort'),
     ('google-scholar-square',
      'https://scholar.google.com/citations?user=87KLuLUAAAAJ'),
+    ('orcid-square', 'https://orcid.org/0000-0003-4782-5360'),
     ('linkedin', 'https://www.linkedin.com/in/larsoner')
 )
 
@@ -73,33 +76,84 @@ TEMPLATE_PAGES = {
 # Publications
 
 
-def make_nice_author(author, emphasize='Larson, E'):
-    author = author.replace("\n", " ")
-    split_author = author.split(' and ')
-    insert_pos = len(split_author) - 1
-    names_split = [au.split(', ') for au in split_author]
-    names = list()
-    for n in names_split:
-        if len(n) == 1:
-            names.append(n[0])
+def clean_latex(text):
+    """Convert the bits of LaTeX we use in the .bib file to plain text."""
+    for latex, plain in (("\\&", "&"), ("\\_", "_"), ("\\%", "%")):
+        text = text.replace(latex, plain)
+    text = text.replace("{", "").replace("}", "").replace("\\", "")
+    return " ".join(text.split())
+
+
+def make_initials(given):
+    """Turn given names into initials, e.g. 'Jean-Rémi' -> 'J.-R.', 'Adrian KC' -> 'A. K. C.'."""
+    initials = []
+    for token in given.replace(".", ". ").split():
+        if token.isupper() and token.isalpha() and len(token) > 1:  # e.g. KC
+            initials.extend(f"{c}." for c in token)
         else:
-            assert len(n) == 2, n
-            for ii in range(2):
-                if n[ii].startswith('{') and n[ii].endswith('}'):
-                    n[ii] = n[ii][1:-1]
-            names.append('{}, {}.'.format(n[0], n[1][:1]))
-    if len(split_author) > 1:
-        author_edit = ', '.join(names[:insert_pos]) + ' and ' + names[insert_pos]
-    else:
-        author_edit = names[insert_pos]
-    if emphasize:
-        author_edit = author_edit.replace(
-            emphasize, '<strong><em>' + emphasize + '</em></strong>')
-    return author_edit
+            initials.append("-".join(f"{part[:1]}." for part in token.split("-") if part))
+    return " ".join(initials)
+
+
+def make_nice_author(author, emphasize="Larson", max_authors=12, n_first=6):
+    names = []
+    emphasized = []
+    for name in clean_latex(author).split(" and "):
+        surname, _, given = name.partition(", ")
+        nice = f"{surname}, {make_initials(given)}" if given else surname
+        is_me = surname == emphasize and given.startswith("E")
+        if is_me:
+            nice = f"<strong>{nice}</strong>"
+        names.append(nice)
+        emphasized.append(is_me)
+    if len(names) > max_authors:  # first few, me, and the last author
+        mine = [ii for ii, me in enumerate(emphasized) if me]
+        keep = sorted(set(range(n_first)) | set(mine) | {len(names) - 1})
+        shown = []
+        for prev, ii in zip([-1] + keep[:-1], keep):
+            if ii - prev > 1:
+                shown.append("…")
+            shown.append(names[ii])
+        return ", ".join(shown[:-1]) + ", and " + shown[-1]
+    if len(names) == 1:
+        return names[0]
+    if len(names) == 2:
+        return " and ".join(names)
+    return ", ".join(names[:-1]) + ", and " + names[-1]
 
 
 def make_nice_title(title):
-    return title.replace('{', '').replace('}', '').replace("\\", '').replace("\n", " ")
+    return clean_latex(title)
+
+
+def make_venue(item):
+    """Build the HTML citation line (journal, volume, pages, etc.) for an entry."""
+    get = {key: html.escape(clean_latex(item.get(key, "")), quote=False)
+           for key in ("journal", "booktitle", "volume", "number", "pages",
+                       "publisher", "edition")}
+    pages = get["pages"].replace("--", "–")
+    if item["ENTRYTYPE"] == "article":
+        venue = f"<em>{get['journal']}</em>"
+        issue = f"({get['number']})" if get["number"] else ""
+        if get["volume"] or issue:
+            venue += f" {get['volume']}{issue}"
+            if pages:
+                venue += f": {pages}"
+        elif pages:
+            venue += f", {pages}"
+    elif item["ENTRYTYPE"] in ("inproceedings", "incollection"):
+        venue = f"In <em>{get['booktitle']}</em>"
+        if get["edition"]:
+            edition = get["edition"]
+            suffix = {"1": "st", "2": "nd", "3": "rd"}.get(edition, "th")
+            venue += f" ({edition}{suffix} ed.)"
+        if get["publisher"] and item["ENTRYTYPE"] == "incollection":
+            venue += f", {get['publisher']}"
+        if pages:
+            venue += f", pp. {pages}"
+    else:
+        venue = get["publisher"]
+    return venue + "." if venue else ""
 
 
 """ XXX
@@ -112,33 +166,31 @@ def get_bib_entries(bib_fname):
     with open(bib_fname) as bib:
         bib_str = bib.read()
 
-    parser = bibtexparser.bparser.BibTexParser(common_strings=True)
-    records = parser.parse(bib_str)
-    parser2 = bibtexparser.bparser.BibTexParser(common_strings=True)
-    one_records = parser2.parse(bib_str)
+    library = bibtexparser.parse_string(bib_str)
+    assert not library.failed_blocks, "Failed to parse:\n" + "\n".join(
+        block.raw for block in library.failed_blocks)
 
     entries = []
 
     missing_dates = []
-    for k, item in enumerate(records.entries):
-        one_records.entries = [item]
-        item['author'] = make_nice_author(item['author'])
+    for k, entry in enumerate(library.entries):
         for key in ['annote', 'owner', 'group', 'topic']:
-            if key in item:
-                del item[key]
-
-        item['bibtex'] = bibtexparser.dumps(one_records).strip()
-        item['title'] = make_nice_title(item['title'])
+            entry.pop(key)
+        item = {field.key: field.value for field in entry.fields}
+        item['ENTRYTYPE'] = entry.entry_type.lower()
+        item['ID'] = entry.key
+        item['bibtex'] = html.escape(bibtexparser.write_string(
+            bibtexparser.Library([entry])).strip(), quote=False)
+        item['author'] = make_nice_author(item['author'])
+        item['title'] = html.escape(make_nice_title(item['title']), quote=False)
+        item['venue'] = make_venue(item)
         item['index'] = k
-        if 'pages' in item:
-            item['pages'] = item['pages'].replace('--', '–')
         if 'doi' in item:
             item['link'] = f'https://doi.org/{item["doi"]}'
+            item['link_text'] = 'DOI'
         elif 'url' in item:
             item['link'] = item['url']
-        for key in ("title", "journal", "booktitle"):
-            if key in item:
-                item[key] = make_nice_title(item[key])
+            item['link_text'] = 'Link'
         entries.append(item)
         if "date" not in item and "year" not in item:
             missing_dates.append(item['title'][:80])
@@ -164,6 +216,47 @@ entries.sort(key=date_sort, reverse=True)
 
 PUBLICATION_LIST = entries
 PUBLICATION_LIST_SLAB = entries
-PUBLICATION_LIST_SHORT = PUBLICATION_LIST[:7]
+PUBLICATION_LIST_SHORT = PUBLICATION_LIST[:5]
 TAGLINE = 'UW ILABS'
 N_PUBLICATIONS = len(PUBLICATION_LIST)
+
+# Landing page
+
+SOFTWARE = (  # (name, URL, role, description)
+    ('MNE-Python', 'https://mne.tools', 'Steering Council',
+     'Complete M/EEG analysis: preprocessing, forward and inverse modeling, '
+     'connectivity, statistics, and machine learning.'),
+    ('SciPy', 'https://scipy.org', 'Maintainer',
+     'Core scientific Python library, including the signal processing '
+     'routines used across the ecosystem.'),
+    ('PyVistaQt', 'https://qt.pyvista.org', 'Maintainer',
+     'Qt integration for PyVista, enabling interactive 3D visualization in '
+     'desktop applications.'),
+    ('sphinx-gallery', 'https://sphinx-gallery.github.io', 'Maintainer',
+     'Builds rich HTML example galleries from Python scripts for project '
+     'documentation.'),
+)
+
+# Repositories (not owned by me, excluding conda-forge feedstocks) with merged
+# PRs from me, counted via the GitHub GraphQL API in Oct 2026: 209
+SOFTWARE_MORE = (
+    '200+ more open-source projects on GitHub',
+    'Including VisPy, PyVista, Matplotlib, NumPy, scikit-learn, nilearn, '
+    'DIPY, and Sphinx. See also my '
+    '<a href="https://gitlab.kitware.com/vtk/vtk/-/merge_requests'
+    '?scope=all&amp;state=merged&amp;author_username=larsoner">'
+    'VTK contributions</a> on GitLab.',
+)
+
+TIMELINE = (  # (years, logo, institution, URL, description)
+    ('2014–present', 'UW.svg', 'University of Washington', 'https://ilabs.uw.edu',
+     'Research scientist, Institute for Learning & Brain Sciences'),
+    ('2011–2013', 'UW.svg', 'University of Washington',
+     'https://labsn.uw.edu',
+     'Postdoctoral fellow, Speech & Hearing Sciences, with Adrian KC Lee'),
+    ('2006–2011', 'BU.svg', 'Boston University',
+     'https://www.bu.edu/eng/departments/bme/',
+     'MS and PhD in Biomedical Engineering'),
+    ('2002–2006', 'K.png', 'Kalamazoo College', 'https://www.kzoo.edu/',
+     'BA in Mathematics, Physics, and Philosophy'),
+)

@@ -1,4 +1,4 @@
-pelican
+pelican>=4.12
 Markdown
-bibtexparser
+bibtexparser>=2
 ghp-import

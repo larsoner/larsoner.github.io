@@ -1,32 +1,24 @@
-    <p class="post-meta">
-    <b>{{ item['title']}}</b></br>
-    {{ item['author'] }} ({{ item['year']}})</br>
-    {% if item['ENTRYTYPE'] == 'inproceedings' %}
-        {{ item['booktitle'] }}
-    {% elif item['ENTRYTYPE'] == 'article' %}
-        {{ item['journal'] }}
-        {% if 'volume' in item %}
-            {{ item['volume'] }}: ({{ item['pages'] }}).
-        {% else %}
-            .
-        {% endif %}
-    {% else %}
-    {% endif %}
+<div class="post-meta publi">
+    <span class="publi-title">{{ item['title'] }}</span><br/>
+    {{ item['author'] }} ({{ item['year'] }}).
+    {{ item['venue'] }}
+    <span class="publi-links">
     {% if 'pdf' in item %}
-        <a href="{{ item['pdf'] }}">
-            <img src="images/Haltools_pdf.png">
-        </a>
+        <a href="{{ item['pdf'] }}">PDF</a>
     {% endif %}
     {% if 'link' in item %}
-        <a href="{{ item['link'] }}">[www]</a>
+        <a href="{{ item['link'] }}">{{ item['link_text'] }}</a>
     {% endif %}
+    {% if 'bibtex' in item %}
+        <a class="publi-bibtex-button" id="bibtex_{{ item['index'] }}">BibTeX</a>
+    {% endif %}
+    </span>
     {% if 'comment' in item %}
         {{ item['comment'] }}
     {% endif %}
     {% if 'bibtex' in item %}
-        <a class="publi-bibtex-button" id="bibtex_{{ item['index'] }}">[BibTeX]</a>
         <div class="publi-bibtex" id="bibtex_{{ item['index'] }}_content">
             <pre>{{ item['bibtex'] }}</pre>
         </div>
     {% endif %}
-    </p>
+</div>

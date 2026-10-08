@@ -18,7 +18,7 @@
                     <h2><a href="/">Eric Larson</a></h2>
 
                     <p class="brand-main-sub">
-                        <em>Research Scientist</em>
+                        <em>Principal Research Scientist</em>
                         <br />
                         <a href="http://ilabs.washington.edu">Institute for Learning and Brain Sciences</a>
                         <br />
@@ -52,7 +52,7 @@
 
                 <p class="social">
                 {% for title, link in SOCIAL %}
-                {% if title == "google-scholar-square" %}
+                {% if title in ("google-scholar-square", "orcid-square") %}
                 <a href="{{ link }}">
                     <i class="ai ai-{{ title }} ai-3x"></i>
                 </a>
